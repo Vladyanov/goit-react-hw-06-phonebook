@@ -1,4 +1,3 @@
-// import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
@@ -7,33 +6,28 @@ import ContactsList from './PhoneBook/ContactsList/ContactsList';
 import ContactsFilter from './ContactsFilter/ContactsFilter';
 import ContactsForm from './ContactsForm/ContactsForm';
 
-// import items from './items';
+import { addContact, removeContact } from 'redux/contacts/contacts-actions';
+import { setFilter } from 'redux/filter/filter-actions';
 
-import { addContact, removeContact, setFilter } from 'redux/actions';
-
-import { getFilter, getFilteredContacts } from 'redux/selectors';
+import {
+  getAllContacts,
+  getFilteredContacts,
+} from 'redux/contacts/contacts-selectors';
+import { getFilter } from 'redux/filter/filter-selectors';
 
 import css from './phone-book.module.scss';
 
 const PhoneBook = () => {
+  const contacts = useSelector(getAllContacts);
   const filteredContacts = useSelector(getFilteredContacts);
   const filter = useSelector(getFilter);
-  // const [filter, setFilter] = useState('');
-  // const [contacts, setContacts] = useState(() => {
-  //   const contacts = JSON.parse(localStorage.getItem('contacts'));
-  //   return contacts ? contacts : [...items];
-  // });
-
-  // useEffect(() => {
-  //   localStorage.setItem('contacts', JSON.stringify(contacts));
-  // }, [contacts]);
 
   const dispatch = useDispatch();
 
   const isDuplicate = name => {
     const normalizedName = name.toLowerCase();
 
-    const isUnique = filteredContacts.find(({ name }) => {
+    const isUnique = contacts.find(({ name }) => {
       return name.toLocaleLowerCase() === normalizedName;
     });
     return isUnique;
