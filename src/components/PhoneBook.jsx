@@ -1,4 +1,4 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
@@ -9,13 +9,16 @@ import ContactsForm from './ContactsForm/ContactsForm';
 
 // import items from './items';
 
-import { addContact, removeContact } from 'redux/actions';
+import { addContact, removeContact, setFilter } from 'redux/actions';
+
+import { getFilter, getFilteredContacts } from 'redux/selectors';
 
 import css from './phone-book.module.scss';
 
 const PhoneBook = () => {
-  const contacts = useSelector(store => store.contacts);
-  const [filter, setFilter] = useState('');
+  const filteredContacts = useSelector(getFilteredContacts);
+  const filter = useSelector(getFilter);
+  // const [filter, setFilter] = useState('');
   // const [contacts, setContacts] = useState(() => {
   //   const contacts = JSON.parse(localStorage.getItem('contacts'));
   //   return contacts ? contacts : [...items];
@@ -30,7 +33,7 @@ const PhoneBook = () => {
   const isDuplicate = name => {
     const normalizedName = name.toLowerCase();
 
-    const isUnique = contacts.find(({ name }) => {
+    const isUnique = filteredContacts.find(({ name }) => {
       return name.toLocaleLowerCase() === normalizedName;
     });
     return isUnique;
@@ -51,21 +54,20 @@ const PhoneBook = () => {
   };
 
   const handleFilter = ({ target }) => {
-    setFilter(target.value);
+    dispatch(setFilter(target.value));
   };
 
-  const getFilteredContacts = () => {
-    if (!filter) {
-      return contacts;
-    }
-    const normalizedFilter = filter.toLowerCase();
-    const res = contacts.filter(({ name }) => {
-      return name.toLowerCase().includes(normalizedFilter);
-    });
-    return res;
-  };
+  // const getFilteredContacts = () => {
+  //   if (!filter) {
+  //     return contacts;
+  //   }
+  //   const normalizedFilter = filter.toLowerCase();
+  //   const res = contacts.filter(({ name }) => {
+  //     return name.toLowerCase().includes(normalizedFilter);
+  //   });
+  //   return res;
+  // };
 
-  const filteredContacts = getFilteredContacts();
   return (
     <>
       <div className={css.block}>
@@ -73,7 +75,7 @@ const PhoneBook = () => {
         <ContactsForm onSubmit={onAddContact} />
       </div>
       <div className={css.block}>
-        <ContactsFilter handleChange={handleFilter} />
+        <ContactsFilter value={filter} handleChange={handleFilter} />
         <ContactsList
           contacts={filteredContacts}
           removeContact={handleRemoveContact}
