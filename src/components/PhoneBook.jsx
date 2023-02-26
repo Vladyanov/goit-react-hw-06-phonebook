@@ -6,8 +6,8 @@ import ContactsList from './PhoneBook/ContactsList/ContactsList';
 import ContactsFilter from './ContactsFilter/ContactsFilter';
 import ContactsForm from './ContactsForm/ContactsForm';
 
-import { addContact, removeContact } from 'redux/contacts/contacts-actions';
-import { setFilter } from 'redux/filter/filter-actions';
+import { addContact, removeContact } from 'redux/contacts/contacts-slice';
+import { setFilter } from 'redux/filter/filter-slice';
 
 import {
   getAllContacts,
@@ -50,17 +50,6 @@ const PhoneBook = () => {
   const handleFilter = ({ target }) => {
     dispatch(setFilter(target.value));
   };
-
-  // const getFilteredContacts = () => {
-  //   if (!filter) {
-  //     return contacts;
-  //   }
-  //   const normalizedFilter = filter.toLowerCase();
-  //   const res = contacts.filter(({ name }) => {
-  //     return name.toLowerCase().includes(normalizedFilter);
-  //   });
-  //   return res;
-  // };
 
   return (
     <>
